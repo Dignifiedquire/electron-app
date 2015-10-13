@@ -10,62 +10,24 @@ var exec = require('child_process').exec
 var argv = require('minimist')(process.argv.slice(2))
 var pkgInfo = require('./package.json')
 
-// Need to customize this list to avoid issues with missing
-// dependencies
-var ignoreDeps = [
-  'babel',
-  'babel-core',
-  'babel-eslint',
-  'babel-loader',
-  'babel-plugin-react-transform',
-  'css-loader',
-  'electron-debug',
-  'electron-packager',
-  'electron-prebuilt',
-  'eslint',
-  'eslint-config-standard',
-  'eslint-config-standard-react',
-  'eslint-plugin-react',
-  'eslint-plugin-standard',
-  'express',
-  'file-loader',
-  'less',
-  'less-loader',
-  'pre-commit',
-  'react-transform-catch-errors',
-  'react-transform-hmr',
-  'redbox-react',
-  'standard',
-  'style-loader',
-  'webpack',
-  'webpack-dev-middleware',
-  'webpack-hot-middleware',
-  'webpack-target-electron-renderer'
-]
-
 var appName = argv.name || argv.n || 'Station'
 var shouldUseAsar = argv.asar || argv.a || false
 var shouldBuildAll = argv.all || false
+var icon = argv.icon || argv.i || './node_modules/ipfs-logo/platform-icons/ipfs.icns'
 
 var DEFAULT_OPTS = {
   dir: './',
   name: appName,
   asar: shouldUseAsar,
+  // Enable when https://github.com/npm/npm/issues/9818 is fixed
+  // prune: true,
+  icon: icon,
   'app-version': pkgInfo.version,
   ignore: [
     '/test($|/)',
-    '/tools($|/)',
     '/release($|/)',
     '/app.log'
-  ].concat(ignoreDeps.map(function (name) {
-    return '/node_modules/' + name + '($|/)'
-  }))
-}
-
-var icon = argv.icon || argv.i || './node_modules/ipfs-logo/platform-icons/ipfs.icns'
-
-if (icon) {
-  DEFAULT_OPTS.icon = icon
+  ]
 }
 
 var version = argv.version || argv.v

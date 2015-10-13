@@ -2,13 +2,12 @@ import menubar from 'menubar'
 import fs from 'fs'
 import ipfsd from 'ipfsd-ctl'
 import {join} from 'path'
+import dialog from 'dialog'
+import BrowserWindow from 'browser-window'
 
 import {getLocation} from './helpers'
 import config from './config'
 import dragDrop from './controls/drag-drop'
-
-const dialog = require('dialog')
-const BrowserWindow = require('browser-window')
 
 if (config.isProduction) {
   require('crash-reporter').start()
@@ -203,12 +202,13 @@ export function getIPFS () {
 export {logger}
 
 export function boot (lokker) {
+  logger.info('Starting application')
   logger = lokker
 
   // main entry point
   ipfsd.local((err, node) => {
     if (err) return logger.error(err)
-
+    logger.info('starting menubar')
     mb = menubar(config.menuBar)
 
     mb.on('ready', () => {
