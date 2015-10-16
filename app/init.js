@@ -202,8 +202,9 @@ export function getIPFS () {
 export {logger}
 
 export function boot (lokker) {
-  logger.info('Starting application')
   logger = lokker
+
+  logger.info('Starting application')
 
   // main entry point
   ipfsd.local((err, node) => {
